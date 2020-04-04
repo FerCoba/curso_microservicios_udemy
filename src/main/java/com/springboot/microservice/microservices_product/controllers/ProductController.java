@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.springboot.microservice.microservices_product.model.entity.Product;
+import com.springboot.microservice.microservices_product.model.entities.Product;
 import com.springboot.microservice.microservices_product.response.Response;
 import com.springboot.microservice.microservices_product.services.ProductService;
 
@@ -24,14 +24,16 @@ public class ProductController {
 	@GetMapping(value = "/obtainInformationAllProducts")
 	public ResponseEntity<Response> obtainAllProducts() {
 
-		List<Product> product = productService.findAllProducts();
+		List<Product> products = productService.findAllProducts();
 
-		return product.isEmpty()
+		return products.isEmpty()
 
-				? new ResponseEntity<>(new Response(String.valueOf(HttpStatus.OK.value()), "Not Data Found", null),
+				? new ResponseEntity<>(
+						new Response(String.valueOf(HttpStatus.OK.value()), "Not Data Found", null, null),
 						HttpStatus.BAD_REQUEST)
 
-				: new ResponseEntity<>(new Response(String.valueOf(HttpStatus.OK), null, product), HttpStatus.OK);
+				: new ResponseEntity<>(new Response(String.valueOf(HttpStatus.OK), null, null, products),
+						HttpStatus.OK);
 	}
 
 	@GetMapping(value = "obtainProductInformation/{productId}")
@@ -43,10 +45,10 @@ public class ProductController {
 
 				? new ResponseEntity<>(
 						new Response(String.valueOf(HttpStatus.OK.value()),
-								"Not Data Found for this id : ".concat(String.valueOf(productId)), null),
+								"Not Data Found for this id : ".concat(String.valueOf(productId)), null, null),
 						HttpStatus.BAD_REQUEST)
 
-				: new ResponseEntity<>(new Response(String.valueOf(HttpStatus.OK), null, product), HttpStatus.OK);
+				: new ResponseEntity<>(new Response(String.valueOf(HttpStatus.OK.value()), null, product, null), HttpStatus.OK);
 	}
 
 }

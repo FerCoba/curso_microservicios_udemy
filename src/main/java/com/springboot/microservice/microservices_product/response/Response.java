@@ -1,6 +1,9 @@
 package com.springboot.microservice.microservices_product.response;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.springboot.microservice.microservices_product.model.entities.Product;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,5 +17,6 @@ public class Response {
 
 	private String status;
 	private String message;
-	private Object result;
+	private Product product;
+	private List<Product> products;
 }

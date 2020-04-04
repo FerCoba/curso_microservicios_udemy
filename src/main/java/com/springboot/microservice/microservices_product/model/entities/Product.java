@@ -1,4 +1,4 @@
-package com.springboot.microservice.microservices_product.model.entity;
+package com.springboot.microservice.microservices_product.model.entities;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,4 +31,6 @@ public class Product {
 	@Temporal(TemporalType.DATE)
 	private Date crationDate;
 	private BigDecimal price;
+	@Transient
+	private Integer port;
 }
