@@ -22,10 +22,14 @@ public class ProductController {
 	ProductService productService;
 
 	@GetMapping(value = "/obtainInformationAllProducts")
-	public ResponseEntity<Response> obtainAllProducts() {
+	public ResponseEntity<Response> obtainAllProducts() throws Exception {
 
 		List<Product> products = productService.findAllProducts();
 
+		boolean errorTest = false;
+		if(errorTest == false) {
+			throw new Exception();
+		}
 		return products.isEmpty()
 
 				? new ResponseEntity<>(
