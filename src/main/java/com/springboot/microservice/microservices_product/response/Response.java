@@ -3,7 +3,7 @@ package com.springboot.microservice.microservices_product.response;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.springboot.microservice.microservices_product.model.entities.Product;
+import com.springboot.microservice.servicec_commons.model.entities.Product;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
