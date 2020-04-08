@@ -44,7 +44,7 @@ public class ProductController {
 		try {
 			products = productService.findAllProducts();
 		} catch (Exception e) {
-			LOGGER.error(EXCEPTION_MESSAGE, e.getCause());
+			LOGGER.error(EXCEPTION_MESSAGE, e.getMessage());
 			throw new Exception500Status();
 		}
 
@@ -60,11 +60,16 @@ public class ProductController {
 	}
 
 	@GetMapping(value = "obtainProductInformation/{productId}")
-	public ResponseEntity<Response> obtainProductBy(@PathVariable Long productId) {
+	public ResponseEntity<Response> obtainProductBy(@PathVariable Long productId) throws ParametersException {
 
 		LOGGER.info(ENTRY_METHOD_MESSAGE, "obtainProductBy");
-
-		Product product = productService.findProductById(productId);
+		Product product = new Product();
+		try {
+			product = productService.findProductById(productId);
+		} catch (Exception e) {
+			LOGGER.error(EXCEPTION_MESSAGE, e.getMessage());
+			throw new ParametersException();
+		}
 
 		LOGGER.info(EXIT_METHOD, "obtainProductBy");
 
@@ -81,17 +86,12 @@ public class ProductController {
 
 	@PostMapping(value = "/createNewProduct")
 	public ResponseEntity<Response> createNewProduct(@RequestBody Product productParams)
-			throws Exception500Status, ParametersException {
+			throws ParametersException, Exception500Status {
 
 		LOGGER.info(ENTRY_METHOD_MESSAGE, "createNewProduct");
 
-		Product product = new Product();
-		try {
-			product = productService.save(productParams);
-		} catch (Exception e) {
-			LOGGER.error(EXCEPTION_MESSAGE, e.getCause());
-			throw e;
-		}
+		Product product = productService.save(productParams);
+		
 		LOGGER.info(ENTRY_METHOD_MESSAGE, "createNewProduct");
 		return product.getId() == 0l
 				? new ResponseEntity<>(new Response(String.valueOf(HttpStatus.BAD_REQUEST.value()),
@@ -107,7 +107,7 @@ public class ProductController {
 		try {
 			productService.deleteById(productId);
 		} catch (Exception e) {
-			LOGGER.error(EXCEPTION_MESSAGE, e.getCause());
+			LOGGER.error(EXCEPTION_MESSAGE, e.getMessage());
 			throw new EmptyResultDataAccessException(0);
 		}
 		LOGGER.info(ENTRY_METHOD_MESSAGE, "deleteProduct");
