@@ -13,8 +13,8 @@ import com.springboot.microservice.microservices_product.response.ResponseError;
 
 public enum EnumExceptionsHandler {
 
-	THROW_EXCEPTION("Exception500Status", "BadRequest", "ZuulException", "NotFound", "HystrixRuntimeException",
-			"EmptyResultDataAccessException", "NoHandlerFoundException") {
+	THROW_EXCEPTION("Exception500Status", "BadRequest", "ZuulException",
+			"EmptyResultDataAccessException", "NoHandlerFoundException", "ParametersException") {
 
 		private Object conversion(Object obj) {
 
@@ -34,13 +34,14 @@ public enum EnumExceptionsHandler {
 			if (THROW_EXCEPTION.getValues().contains((tipoException))) {
 
 				switch (tipoException) {
+				
+				case "ParametersException":
+					resp = new ResponseError(HttpStatus.BAD_REQUEST, "parameters not valid.");
+					return new ResponseEntity<>(conversion(resp), HttpStatus.BAD_REQUEST);
 				case "NoHandlerFoundException":
 					resp = new ResponseError(HttpStatus.NOT_FOUND, "the resource not exist.");
 					return new ResponseEntity<>(conversion(resp), HttpStatus.NOT_FOUND);
 				case "EmptyResultDataAccessException":
-					resp = new ResponseError(HttpStatus.OK, "Not data found.");
-					return new ResponseEntity<>(conversion(resp), HttpStatus.OK);
-				case "BadRequest":
 					resp = new ResponseError(HttpStatus.OK, "Not data found.");
 					return new ResponseEntity<>(conversion(resp), HttpStatus.OK);
 				case "Exception500Status":
