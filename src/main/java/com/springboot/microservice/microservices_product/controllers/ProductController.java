@@ -59,8 +59,33 @@ public class ProductController {
 						HttpStatus.OK);
 	}
 
-	@GetMapping(value = "obtainProductInformation/{productId}")
-	public ResponseEntity<Response> obtainProductBy(@PathVariable Long productId) throws ParametersException {
+	@GetMapping(value = "/obtainProductInformation/{productId}")
+	public ResponseEntity<Response> obtainProduct(@PathVariable Long productId) throws ParametersException {
+
+		LOGGER.info(ENTRY_METHOD_MESSAGE, "obtainProduct");
+		Product product = new Product();
+		try {
+			product = productService.findProductById(productId);
+		} catch (Exception e) {
+			LOGGER.error(EXCEPTION_MESSAGE, e.getMessage());
+			throw new ParametersException();
+		}
+
+		LOGGER.info(EXIT_METHOD, "obtainProduct");
+
+		return product == null
+
+				? new ResponseEntity<>(
+						new Response(String.valueOf(HttpStatus.OK.value()),
+								"Not Data Found for this id : ".concat(String.valueOf(productId)), null, null),
+						HttpStatus.BAD_REQUEST)
+
+				: new ResponseEntity<>(new Response(String.valueOf(HttpStatus.OK.value()), null, product, null),
+						HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/productId/{productId}/obtainProductInformation")
+	public ResponseEntity<Response> obtainProductByProductId(@PathVariable Long productId) throws ParametersException {
 
 		LOGGER.info(ENTRY_METHOD_MESSAGE, "obtainProductBy");
 		Product product = new Product();
